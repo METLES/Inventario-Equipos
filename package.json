@@ -1,0 +1,15 @@
+{
+  "name": "servicio-social",
+  "version": "1.0.0",
+  "description": "Sistema Inventario para Oficialia Mayor",
+  "main": "index.js",
+  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "METLES",
+  "license": "ISC",
+  "type": "module" 
+}

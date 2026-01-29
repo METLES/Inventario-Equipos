@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario Equipo</title>
+    <%- include('partials/head') %>
+</head>
+
+<body>
+    <%- include('partials/navigation') %>
+
+        <body class="bg-light">
+
+            <!-- Header -->
+            <div class="bg-white border-bottom py-3 mb-4">
+                <div class="container">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 rounded p-2 me-3">
+                            <i class="bi bi-building text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h1 class="mb-0 h3 fw-bold">Inventario de Componentes TI</h1>
+                            <p class="text-muted mb-0 small">Sistema de gestión de equipos tecnológicos gubernamentales
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="container">
+
+                <h1 class="h4 mb-4">Buscar en Inventario</h1>
+
+
+                <!-- Controles -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Búsqueda -->
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control"
+                                        placeholder="Buscar por ID, tipo, procesador, SO...">
+                                </div>
+                            </div>
+
+
+                            <!-- Filtro Tipo -->
+                            <div class="col-lg-2 col-md-6">
+                                <select class="form-select">
+                                    <option selected>Tipo de equipo</option>
+                                    <option>Computadora</option>
+                                    <option>Impresora</option>
+                                    <option>Monitor</option>
+                                    <option>Teclado</option>
+                                    <option>Mouse</option>
+                                </select>
+                            </div>
+
+                             <!-- Filtro Estado -->
+                            <div class="col-lg-2 col-md-6">
+                                <select class="form-select">
+                                    <option selected>Todos los estados</option>
+                                    <option>Activo</option>
+                                    <option>En reparación</option>
+                                    <option>Inactivo</option>
+                                    <option>Dado de baja</option>
+
+                                    Desktop
+
+                                </select>
+                            </div>
+
+                            <!-- Botones -->
+                            <br>
+                            <div class="col-lg-3 d-flex gap-3 ">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+                                    Agregar equipo
+                                </button>
+
+                                <button class="btn btn-outline-primary">
+
+                                    Exportar
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla -->
+                <div class="card shadow-sm mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID Activo</th>
+                                    <th>Tipo</th>
+                                    <th>Procesador</th>
+                                    <th>Sistema Operativo</th>
+                                    <th>Versión</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Adq.</th>
+                                    <th class="text-end">Observaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="10" class="text-center text-muted py-5">
+                                        No hay componentes en el inventario
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Contador -->
+                <div class="text-muted small mb-4">
+                    Mostrando 0 de 0 componentes
+                </div>
+
+            </div>
+
+            <!-- Modal Agregar/Editar -->
+            <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalAgregarLabel">Agregar Componente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="row g-3">
+                                    <!-- ID Activo -->
+                                    <div class="col-md-6">
+                                        <label for="assetId" class="form-label">ID de Activo *</label>
+                                        <input type="text" class="form-control" id="assetId" placeholder="GOB-2024-001"
+                                            required>
+                                    </div>
+
+                                    <!-- Tipo -->
+                                    <div class="col-md-6">
+                                        <label for="tipo" class="form-label">Tipo de Componente *</label>
+                                        <select class="form-select" id="tipo" required>
+                                            <option selected disabled>Seleccionar...</option>
+                                            <option>Desktop</option>
+                                            <option>Laptop</option>
+                                            <option>Monitor</option>
+                                            <option>CPU</option>
+                                            <option>Servidor</option>
+                                            <option>Impresora</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Procesador -->
+                                    <div class="col-md-6">
+                                        <label for="procesador" class="form-label">Procesador *</label>
+                                        <input type="text" class="form-control" id="procesador"
+                                            placeholder="Intel Core i5-12400" required>
+                                    </div>
+
+                                    <!-- RAM -->
+                                    <div class="col-md-6">
+                                        <label for="ram" class="form-label">RAM</label>
+                                        <input type="text" class="form-control" id="ram" placeholder="16GB DDR4">
+                                    </div>
+
+                                    <!-- Sistema Operativo -->
+                                    <div class="col-md-6">
+                                        <label for="so" class="form-label">Sistema Operativo *</label>
+                                        <select class="form-select" id="so" required>
+                                            <option selected disabled>Seleccionar...</option>
+                                            <option>Windows 11</option>
+                                            <option>Windows 10</option>
+                                            <option>Ubuntu Linux</option>
+                                            <option>macOS</option>
+                                            <option>Red Hat Enterprise Linux</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Versión del Sistema -->
+                                    <div class="col-md-6">
+                                        <label for="version" class="form-label">Versión del Sistema *</label>
+                                        <input type="text" class="form-control" id="version" placeholder="22H2"
+                                            required>
+                                    </div>
+
+                                    <!-- Pantalla -->
+                                    <div class="col-md-6">
+                                        <label for="pantalla" class="form-label">Pantalla *</label>
+                                        <input type="text" class="form-control" id="pantalla" placeholder='24" Full HD'
+                                            required>
+                                    </div>
+
+                                    <!-- Almacenamiento -->
+                                    <div class="col-md-6">
+                                        <label for="storage" class="form-label">Almacenamiento</label>
+                                        <input type="text" class="form-control" id="storage" placeholder="512GB SSD">
+                                    </div>
+
+                                    <!-- Departamento -->
+                                    <div class="col-md-6">
+                                        <label for="departamento" class="form-label">Departamento *</label>
+                                        <select class="form-select" id="departamento" required>
+                                            <option selected disabled>Seleccionar...</option>
+                                            <option>Administración</option>
+                                            <option>Recursos Humanos</option>
+                                            <option>Finanzas</option>
+                                            <option>TI</option>
+                                            <option>Legal</option>
+                                            <option>Comunicaciones</option>
+                                            <option>Operaciones</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Estado -->
+                                    <div class="col-md-6">
+                                        <label for="estado" class="form-label">Estado *</label>
+                                        <select class="form-select" id="estado" required>
+                                            <option selected disabled>Seleccionar...</option>
+                                            <option>Activo</option>
+                                            <option>En reparación</option>
+                                            <option>Inactivo</option>
+                                            <option>Dado de baja</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Fecha de Adquisición -->
+                                    <div class="col-12">
+                                        <label for="fecha" class="form-label">Fecha de Adquisición *</label>
+                                        <input type="date" class="form-control" id="fecha" required>
+                                    </div>
+
+                                    <!-- Notas -->
+                                    <div class="col-12">
+                                        <label for="notas" class="form-label">Notas Adicionales</label>
+                                        <textarea class="form-control" id="notas" rows="3"
+                                            placeholder="Información adicional sobre el componente..."></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary">Agregar Componente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+
+</html>
