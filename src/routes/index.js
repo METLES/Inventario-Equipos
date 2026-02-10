@@ -1,6 +1,15 @@
 import {Router} from 'express'
 const router = Router();
 
-router.get('/', (req, res) => res.render('index'));
-router.get('/about', (req, res) => res.render('about'));
-export default router;
+const equipoRoutes = require('./equipoRoutes');
+const personalRoutes = require('./personalRoutes');
+
+// Rutas principales
+router.use('/equipos', equipoRoutes);
+router.use('/personal', personalRoutes);
+
+router.get('/', (req, res) => {
+  res.redirect('/equipos');
+});
+
+module.exports = router;

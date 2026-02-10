@@ -19,10 +19,10 @@
                 <div class="container">
                     <div class="d-flex align-items-center">
                         <div class="bg-primary bg-opacity-10 rounded p-2 me-3">
-                            <i class="bi bi-building text-primary fs-3"></i>
+                           <i class="bi bi-buildings text-primary fs-1 "></i>
                         </div>
                         <div>
-                            <h1 class="mb-0 h3 fw-bold">Inventario de Componentes Papu</h1>
+                            <h1 class="mb-0 h3 fw-bold">Inventario de Componentes FEDE</h1>
                             <p class="text-muted mb-0 small">Sistema de gestión de equipos tecnológicos gubernamentales
                             </p>
                         </div>
@@ -107,25 +107,54 @@
                                     <th>Procesador</th>
                                     <th>Sistema Operativo</th>
                                     <th>Versión</th>
+                                    <th>Resguardatorio</th>
                                     <th>Estado</th>
-                                    <th>Fecha Adq.</th>
                                     <th class="text-end">Observaciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="10" class="text-center text-muted py-5">
-                                        No hay componentes en el inventario
-                                    </td>
-                                </tr>
-                            </tbody>
+                                                        <tbody>
+                                                                <!--
+                                                                    La variable `equipos` la provee el controlador: 
+                                                                    `res.render('index', { equipos, totalEquipos })`
+                                                                    Cada elemento `e` corresponde a una fila de la tabla.
+                                                                -->
+                                                                <% if (typeof equipos !== 'undefined' && equipos.length > 0) { %>
+                                                                    <% equipos.forEach(function(e) { %>
+                                                                        <tr>
+                                                                            <!-- ID de activo -->
+                                                                            <td><%= e.assetId %></td>
+                                                                            <!-- Tipo de equipo (Desktop, Laptop, etc.) -->
+                                                                            <td><%= e.tipo %></td>
+                                                                            <!-- Procesador -->
+                                                                            <td><%= e.procesador || '-' %></td>
+                                                                            <!-- Sistema operativo -->
+                                                                            <td><%= e.sistemaOperativo || '-' %></td>
+                                                                            <!-- Versión del sistema -->
+                                                                            <td><%= e.versionSistema || '-' %></td>
+                                                                            <!-- Persona o dependencia resguardatoria -->
+                                                                            <td><%= e.resguardatorio || '-' %></td>
+                                                                            <!-- Estado (Activo, En reparación, etc.) -->
+                                                                            <td><%= e.estado || '-' %></td>
+                                                                            <!-- Observaciones/Notas -->
+                                                                            <td class="text-end"><%= e.notas || '-' %></td>
+                                                                        </tr>
+                                                                    <% }); %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center text-muted py-5">
+                                                                            No hay componentes en el inventario
+                                                                        </td>
+                                                                    </tr>
+                                                                <% } %>
+                                                        </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Contador -->
+                <!-- Contador: mostramos el número de elementos que envió el controlador -->
                 <div class="text-muted small mb-4">
-                    Mostrando 0 de 0 componentes
+                    <!-- `totalEquipos` lo envía el controlador; si no existe, usamos equipos.length -->
+                    Mostrando <strong><%= typeof totalEquipos !== 'undefined' ? totalEquipos : (equipos ? equipos.length : 0) %></strong> de <strong><%= equipos ? equipos.length : 0 %></strong> componentes
                 </div>
 
             </div>
@@ -140,7 +169,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form id="agregarForm">
                                 <div class="row g-3">
 
                                     <!-- ID Activo -->
@@ -211,17 +240,23 @@
                                         <input type="text" class="form-control" id="storage" placeholder="512GB SSD">
                                     </div>
 
-                                    <!-- Departamento -->
+                                     <!-- Ressguardatorio -->
                                     <div class="col-md-6">
-                                        <label for="departamento" class="form-label">Departamento *</label>
-                                        <select class="form-select" id="departamento" required>
+                                        <label for="ressguardatorio" class="form-label">Ressguardatorio</label>
+                                        <input type="text" class="form-control" id="ressguardatorio" placeholder="Juan Perez Lopez">
+                                    </div>
+
+                                    <!-- Area -->
+                                    <div class="col-md-6">
+                                        <label for="Area" class="form-label">Area *</label>
+                                        <select class="form-select" id="Area" required>
                                             <option selected disabled>Seleccionar...</option>
                                             <option>Administración</option>
-                                            <option>Recursos Humanos</option>
-                                            <option>Finanzas</option>
-                                            <option>TI</option>
-                                            <option>Legal</option>
-                                            <option>Comunicaciones</option>
+                                            <option>Direccion de investigacion y litigacion</option>
+                                            <option>Dirección de prevencion del delito</option>
+                                            <option>MESA 2</option>
+                                            <option>MESA 3</option>
+                                            <option>Policia Investigadora</option>
                                             <option>Operaciones</option>
                                             <option>Otro</option>
                                         </select>
@@ -257,13 +292,128 @@
                         <!-- Botones del MODAL -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary">Agregar Componente</button>
+                            <button type="button" id="btnAgregar" class="btn btn-primary">Agregar Componente</button>
                         </div>
                     </div>
                 </div>
             </div>
         </body>
 
-        <%- include('partials/footer') %>
+                <!-- Script opcional: carga datos vía AJAX desde /api/equipos y rellena la tabla -->
+                <script>
+                    /*
+                        Este script hace una petición GET a /api/equipos y reemplaza
+                        el contenido del <tbody> de la tabla por las filas recibidas.
+                        Está comentado por defecto (por si ya renderizas desde el servidor).
+                        Descomenta la llamada a `loadEquipos()` si quieres que la tabla
+                        se actualice dinámicamente en el cliente.
+                    */
+
+                    function renderRows(equipos) {
+                        const tbody = document.querySelector('.table-responsive table tbody');
+                        if (!tbody) return;
+                        if (!equipos || equipos.length === 0) {
+                            tbody.innerHTML = `\n<tr>\n  <td colspan="10" class="text-center text-muted py-5">No hay componentes en el inventario</td>\n</tr>`;
+                            return;
+                        }
+
+                        tbody.innerHTML = equipos.map(e => `\
+                            <tr>\
+                                <td>${e.assetId || e.id || '-'}</td>\
+                                <td>${e.tipo || '-'}</td>\
+                                <td>${e.procesador || '-'}</td>\
+                                <td>${e.sistemaOperativo || e.sistema_operativo || '-'}</td>\
+                                <td>${e.versionSistema || e.version_sistema || '-'}</td>\
+                                <td>${e.resguardatorio || e.resguardatorio || '-'}</td>\
+                                <td>${e.estado || e.estadoEquipo || '-'}</td>\
+                                <td class="text-end">${e.notas || '-'}</td>\
+                            </tr>`).join('');
+                    }
+
+                    async function loadEquipos() {
+                        try {
+                            const res = await fetch('/api/equipos');
+                            if (!res.ok) throw new Error('Error al obtener equipos');
+                            const data = await res.json();
+                            renderRows(data);
+                            // actualizar contador
+                            const contador = document.querySelector('.text-muted.small.mb-4');
+                            if (contador) contador.innerHTML = `Mostrando <strong>${data.length}</strong> de <strong>${data.length}</strong> componentes`;
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    }
+
+                    // Para activar la carga dinámica, descomenta la siguiente línea:
+                    // loadEquipos();
+                </script>
+
+                <%- include('partials/footer') %>
+
+                <script>
+                    // Manejador para enviar nuevo equipo desde el modal
+                    async function submitNuevoEquipo() {
+                        const btn = document.getElementById('btnAgregar');
+                        if (!btn) return;
+                        btn.disabled = true;
+                        try {
+                            const form = document.getElementById('agregarForm');
+                            const get = id => (form.querySelector('#' + id) ? form.querySelector('#' + id).value : undefined);
+
+                            const equipoData = {
+                                assetId: get('assetId'),
+                                tipo: get('tipo'),
+                                procesador: get('procesador'),
+                                ram: get('ram'),
+                                sistemaOperativo: get('so') || get('sistemaOperativo'),
+                                versionSistema: get('version') || get('versionSistema'),
+                                pantalla: get('pantalla'),
+                                almacenamiento: get('storage') || get('almacenamiento'),
+                                resguardatorio: get('ressguardatorio') || get('resguardatorio'),
+                                area: get('Area') || get('area'),
+                                estado: get('estado'),
+                                fechaAdquisicion: get('fecha'),
+                                notas: get('notas'),
+                                marca: get('marca') || null,
+                                modelo: get('modelo') || null,
+                                numSerie: get('numSerie') || null
+                            };
+
+                            const res = await fetch('/api/crear', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(equipoData)
+                            });
+
+                            const json = await res.json();
+                            if (!res.ok || !json.success) {
+                                console.error('Error creando equipo:', json);
+                                alert(json.message || 'Error al crear equipo');
+                                return;
+                            }
+
+                            // Cerrar modal (simular click en el botón de cerrar)
+                            const closeBtn = document.querySelector('#modalAgregar .btn-close');
+                            if (closeBtn) closeBtn.click();
+
+                            // Actualizar tabla si la función existe
+                            if (typeof loadEquipos === 'function') loadEquipos();
+
+                            // Mostrar confirmación rápida
+                            alert(json.message || 'Equipo agregado');
+                        } catch (err) {
+                            console.error(err);
+                            alert('Error al agregar equipo');
+                        } finally {
+                            btn.disabled = false;
+                        }
+                    }
+
+                    // Vincular evento al botón
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const btn = document.getElementById('btnAgregar');
+                        if (btn) btn.addEventListener('click', submitNuevoEquipo);
+                    });
+                </script>
 
 </html>

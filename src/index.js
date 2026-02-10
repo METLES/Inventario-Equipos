@@ -1,40 +1,50 @@
-import express from 'express';
-import os from 'os';
-import indexRoutes from './routes/index.js';
+const express = require('express');
+const path = require('path');
+const sequelize = require('./config/database');
+const equipoRoutes = require('./routes/equipoRoutes');
 
 const app = express();
+
+// Configuración de vistas
 app.set('view engine', 'ejs');
-app.set('views', './src/views');
-app.use(express.static('./src/public'));
-app.use('/', indexRoutes);
+app.set('views', path.join(__dirname, 'views'));
 
-console.log('Starting server...');  
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Rutas
+app.use('/', equipoRoutes);
+
+// Sincronizar BD y arrancar
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '0.0.0.0';
 
-function getLocalIPs() {
-  const nets = os.networkInterfaces();
-  const results = [];
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-      if (net.family === 'IPv4' && !net.internal) {
-        results.push(net.address);
-      }
+(async () => {
+  const dbName = process.env.DB_NAME || 'undefined';
+  const dbUser = process.env.DB_USER || 'undefined';
+  const dbHost = process.env.DB_HOST || 'localhost';
+  const dbPort = process.env.DB_PORT || 3306;
+
+  console.log(`Intentando conectar a la base de datos ${dbName} en ${dbHost}:${dbPort} como ${dbUser}`);
+
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
+    console.log(`Conectado y sincronizada la base de datos ${dbName}`);
+  } catch (err) {
+    // Mostrar error de conexión de forma clara en consola para depuración
+    console.error('No se pudo conectar a la base de datos:');
+    if (err && err.parent && err.parent.code) {
+      console.error('Código de error:', err.parent.code);
     }
+    console.error(err && err.message ? err.message : err);
+    console.error('Continuando sin sincronizar la base de datos (modo desarrollo)');
   }
-  return results;
-}
 
-const server = app.listen(PORT, HOST, () => {
-  const addr = server.address();
-  console.log(`Server is listening on ${addr.address}:${addr.port}`);
-  const ips = getLocalIPs();
-  if (ips.length) {
-    console.log('IP Acceso:');
-    ips.forEach(ip => console.log(`  http://${ip}:${addr.port}`));
-  } else {
-    console.log('No non-internal network interfaces found.');
-  }
-});
+  app.listen(PORT, () => {
+    console.log('Servidor en http://localhost:' + PORT);
+  });
+})();
 
-
+module.exports = app;
