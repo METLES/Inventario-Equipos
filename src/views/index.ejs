@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <!--- Parcial de codigo para barra de navegacion  -->
     <%- include('partials/navigation') %>
 
         <body class="bg-light">
@@ -21,7 +22,7 @@
                             <i class="bi bi-building text-primary fs-3"></i>
                         </div>
                         <div>
-                            <h1 class="mb-0 h3 fw-bold">Inventario de Componentes TI</h1>
+                            <h1 class="mb-0 h3 fw-bold">Inventario de Componentes Papu</h1>
                             <p class="text-muted mb-0 small">Sistema de gestión de equipos tecnológicos gubernamentales
                             </p>
                         </div>
@@ -85,8 +86,7 @@
                                 </button>
 
                                 <button class="btn btn-outline-primary">
-
-                                    Exportar
+                                    Exportar Informe
                                 </button>
 
                             </div>
@@ -130,7 +130,7 @@
 
             </div>
 
-            <!-- Modal Agregar/Editar -->
+            <!-- MODAL Ventana Emergente para añadir un equipo -->
             <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -142,6 +142,7 @@
                         <div class="modal-body">
                             <form>
                                 <div class="row g-3">
+
                                     <!-- ID Activo -->
                                     <div class="col-md-6">
                                         <label for="assetId" class="form-label">ID de Activo *</label>
@@ -184,10 +185,9 @@
                                             <option selected disabled>Seleccionar...</option>
                                             <option>Windows 11</option>
                                             <option>Windows 10</option>
-                                            <option>Ubuntu Linux</option>
+                                            <option>Linux</option>
                                             <option>macOS</option>
-                                            <option>Red Hat Enterprise Linux</option>
-                                            <option>Otro</option>
+                                            
                                         </select>
                                     </div>
 
@@ -254,6 +254,7 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- Botones del MODAL -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="button" class="btn btn-primary">Agregar Componente</button>
@@ -262,5 +263,7 @@
                 </div>
             </div>
         </body>
+
+        <%- include('partials/footer') %>
 
 </html>

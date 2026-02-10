@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "Sistema Inventario para Oficialia Mayor",
   "main": "index.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "METLES",
   "license": "ISC",
-  "type": "module" 
+  "type": "module",
+  "dependencies": {
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "mysql2": "^3.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11",
+    "standard": "^17.1.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
 }
