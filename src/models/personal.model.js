@@ -8,35 +8,37 @@ const Personal = sequelize.define('Personal', {
     autoIncrement: true
   },
   nombre: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   apellidos: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   cargo: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(100)
   },
   email: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     unique: true,
     validate: {
       isEmail: true
     }
   },
   telefono: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(20)
   },
   activo: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
+  },
+  creado: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
   tableName: 'personal',
-  timestamps: true,
-  createdAt: 'creado',
-  updatedAt: false
+  timestamps: false
 });
 
 module.exports = Personal;

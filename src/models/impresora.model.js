@@ -6,7 +6,11 @@ const Impresora = sequelize.define('Impresora', {
   equipo_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    // FK gestionada por las asociaciones en `src/models/index.js`.
+    references: {
+      model: 'equipo',
+      key: 'id'
+    },
+    onDelete: 'CASCADE'
   },
   tipo: {
     type: DataTypes.ENUM('inyeccion', 'laser')

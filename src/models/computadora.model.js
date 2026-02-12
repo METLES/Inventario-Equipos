@@ -6,15 +6,17 @@ const Computadora = sequelize.define('Computadora', {
   equipo_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    // No usar `references` aquí con la clase importada para evitar cargas circulares.
-    // Sequelize creará la FK cuando sincronices y cuando definas las asociaciones
-    // en `src/models/index.js`.
+    references: {
+      model: 'equipo',
+      key: 'id'
+    },
+    onDelete: 'CASCADE'
   },
   sistemaOper: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(100)
   },
   almTipo: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(50)
   },
   almSize: {
     type: DataTypes.FLOAT
@@ -23,12 +25,16 @@ const Computadora = sequelize.define('Computadora', {
     type: DataTypes.INTEGER
   },
   procesador: {
-    type: DataTypes.STRING
-  }
-  ,
+    type: DataTypes.STRING(100)
+  },
   pantalla_asignada_id: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
+    references: {
+      model: 'equipo',
+      key: 'id'
+    },
+    onDelete: 'SET NULL'
   }
 }, {
   tableName: 'computadora',

@@ -6,16 +6,20 @@ const Pantalla = sequelize.define('Pantalla', {
   equipo_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    // Referencia a `equipo.id` se manejará mediante asociaciones en `src/models/index.js`.
+    references: {
+      model: 'equipo',
+      key: 'id'
+    },
+    onDelete: 'CASCADE'
   },
   pulgadas: {
     type: DataTypes.FLOAT
   },
   resolucion: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(50)
   },
   conexion: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING(50)
   }
 }, {
   tableName: 'pantalla',

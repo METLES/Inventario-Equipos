@@ -2,15 +2,23 @@
   "name": "servicio-social",
   "version": "1.0.0",
   "description": "Sistema Inventario para Oficialia Mayor",
+  "keywords": [],
+  "homepage": "https://github.com/METLES/Inventario-Equipos#readme",
+  "bugs": {
+    "url": "https://github.com/METLES/Inventario-Equipos/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/METLES/Inventario-Equipos.git"
+  },
+  "license": "ISC",
+  "author": "METLES",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js"
   },
-  "keywords": [],
-  "author": "METLES",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "ejs": "^4.0.1",
     "express": "^5.2.1",
